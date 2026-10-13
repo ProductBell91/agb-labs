@@ -1,0 +1,112 @@
+---
+// Vibe Terminal: a scripted replay of a real-shaped session. The agent works,
+// runs browser QA through the QA API, then a push asks for a decision.
+---
+<div class="vt" data-term>
+  <div class="phone">
+    <div class="phone-screen vt-screen">
+      <div class="vt-bar"><span class="dot"></span>bumpsync <span class="vt-tabs">hushsync · littlespots</span></div>
+      <pre class="vt-out" data-out aria-live="polite"></pre>
+      <div class="vt-keys" aria-hidden="true"><span>Esc</span><span>Tab</span><span>Ctrl</span><span>Alt</span><span>↑</span><span>↓</span></div>
+      <div class="vt-push" data-push hidden>
+        <p class="vt-push-app">Toolbox · now</p>
+        <p class="vt-push-title">Claude needs a decision in bumpsync</p>
+        <p class="vt-push-body">Apply the RLS migration to production?</p>
+        <div class="vt-push-actions">
+          <button type="button" data-approve>Approve</button>
+          <button type="button" data-open>Open session</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <p class="vt-cap">A replay of a typical session. <button type="button" class="vt-replay" data-replay>Replay</button></p>
+</div>
+
+<style>
+  .vt { display: grid; justify-items: center; gap: 1rem; }
+  .vt-screen { background: #0c0f16; color: #d7dbe6; font-family: ui-monospace, 'SF Mono', Menlo, Consolas, monospace; }
+  .vt-bar { display: flex; align-items: center; gap: 6px; padding: 16px 14px 10px; font-size: 12px; color: #fff; border-bottom: 1px solid #1d2230; }
+  .vt-bar .dot { width: 8px; height: 8px; border-radius: 50%; background: #3ddc84; }
+  .vt-tabs { margin-left: auto; color: #6b7387; }
+  .vt-out { flex: 1; margin: 0; padding: 12px 14px; font-size: 11.5px; line-height: 1.55; white-space: pre-wrap; overflow: hidden; display: flex; flex-direction: column; justify-content: flex-end; }
+  .vt-out :global(.u) { color: #ffd84d; }
+  .vt-out :global(.ok) { color: #3ddc84; }
+  .vt-out :global(.dim) { color: #7d859a; }
+  .vt-out :global(.qa) { color: #7fb4ff; }
+  .vt-keys { display: flex; gap: 5px; padding: 8px 10px 16px; background: #141925; }
+  .vt-keys span { flex: 1; text-align: center; font-size: 10.5px; padding: 7px 0; border-radius: 7px; background: #232a3a; color: #c5cbd9; font-family: var(--body); }
+  .vt-push {
+    position: absolute; left: 8px; right: 8px; top: 8px; padding: 12px 14px; border-radius: 18px;
+    background: rgba(245, 246, 250, 0.97); color: #10162a; font-family: var(--body);
+    box-shadow: 0 14px 30px -10px rgba(0,0,0,.6); animation: drop 0.4s cubic-bezier(.2,1.2,.4,1);
+  }
+  @keyframes drop { from { transform: translateY(-120%); } }
+  .vt-push p { margin: 0; }
+  .vt-push-app { font-size: 11px; color: #5a6377; }
+  .vt-push-title { font-weight: 700; font-size: 14px; margin-top: 3px !important; }
+  .vt-push-body { font-size: 13px; margin-top: 2px !important; }
+  .vt-push-actions { display: flex; gap: 6px; margin-top: 10px; }
+  .vt-push-actions button { flex: 1; min-height: 36px; border-radius: 10px; border: 0; font-weight: 600; font-size: 13px; cursor: pointer; background: #e3e6ee; color: #10162a; }
+  .vt-push-actions [data-approve] { background: #10162a; color: #fff; }
+  .vt-cap { margin: 0; display: flex; align-items: center; gap: 0.8rem; font-size: 0.85rem; color: var(--muted); }
+  .vt-replay {
+    cursor: pointer; border: 1.5px solid var(--rule); background: var(--surface); color: var(--ink);
+    border-radius: 999px; min-height: 40px; padding: 0 1.1rem; font-weight: 600; font-size: 0.9rem;
+  }
+</style>
+
+<script>
+  type Line = [string, number, string?];
+  const SCRIPT: Line[] = [
+    ['› Partners who join by invite land in new-user setup. Find out why and fix it.', 900, 'u'],
+    ['Reading src/pages/Timeline.tsx', 500, 'dim'],
+    ['Reading src/pages/InviteAccept.tsx', 500, 'dim'],
+    ['Found it: Timeline trusts a stale pregnancy cache before the join finishes.', 900],
+    ['Editing 2 files…', 700, 'dim'],
+    ['QA  launch browser 390×844', 450, 'qa'],
+    ['QA  sign in as invited partner', 450, 'qa'],
+    ['QA  screenshot → uploads/screenshots/join-fixed.png', 450, 'qa'],
+    ['QA  console errors: 0', 600, 'qa'],
+    ['✓ Partner lands on the shared timeline.', 700, 'ok'],
+    ['Needs your call: one production migration.', 300],
+  ];
+
+  document.querySelectorAll<HTMLElement>('[data-term]').forEach((root) => {
+    const out = root.querySelector<HTMLElement>('[data-out]')!;
+    const push = root.querySelector<HTMLElement>('[data-push]')!;
+    let run = 0;
+
+    const add = (text: string, cls?: string) => {
+      const el = document.createElement('span');
+      if (cls) el.className = cls;
+      el.textContent = text + '\n';
+      out.appendChild(el);
+    };
+
+    const play = async () => {
+      const me = ++run;
+      out.textContent = '';
+      push.hidden = true;
+      for (const [text, delay, cls] of SCRIPT) {
+        if (me !== run) return;
+        add(text, cls);
+        await new Promise((r) => setTimeout(r, delay));
+      }
+      if (me === run) push.hidden = false;
+    };
+
+    const finish = (msg: string) => {
+      push.hidden = true;
+      add(msg, 'ok');
+    };
+    root.querySelector('[data-approve]')!.addEventListener('click', () => finish('✓ Approved from the lock screen. Migration applied.'));
+    root.querySelector('[data-open]')!.addEventListener('click', () => finish('Back in the session. Reviewing the migration…'));
+    root.querySelector('[data-replay]')!.addEventListener('click', play);
+
+    // Start when it scrolls into view
+    const io = new IntersectionObserver(([e]) => {
+      if (e.isIntersecting) { play(); io.disconnect(); }
+    }, { threshold: 0.4 });
+    io.observe(root);
+  });
+</script>

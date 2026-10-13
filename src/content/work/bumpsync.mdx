@@ -1,0 +1,56 @@
+---
+title: BumpSync
+tagline: Pregnancy apps are built for one parent. This one is built for two.
+summary: How a pregnancy app found its retention lever in partner connection, and rebuilt itself around it.
+status: live
+order: 1
+role: Solo build
+timeframe: Nov 2025 to now
+stack: [React, TypeScript, Supabase, Capacitor, Vercel, Amplitude]
+links:
+  - { label: bumpsync.app, href: 'https://bumpsync.app' }
+shots:
+  - { src: /shots/bumpsync-names_swipe.webp, alt: Swiping on baby names with a partner }
+  - { src: /shots/bumpsync-names_matches.webp, alt: Names both partners liked }
+  - { src: /shots/bumpsync-timeline.webp, alt: Shared pregnancy timeline }
+  - { src: /shots/bumpsync-track.webp, alt: Baby tracking dashboard with feeds, sleep and nappies }
+  - { src: /shots/bumpsync-track_sleep.webp, alt: Sleep tracking with predicted next nap }
+  - { src: /shots/bumpsync-growth.webp, alt: WHO growth chart with percentiles }
+metrics:
+  - { value: '9×', label: 'couples who connect are 9× more likely to still be using it a month later' }
+  - { value: '+70%', label: 'sign-ups month on month from organic search (July 2026)' }
+  - { value: '3 platforms', label: 'iOS, Android and web from one codebase' }
+published: true
+---
+import Decision from '../../components/Decision.astro';
+
+## Pregnancy apps are built for one person
+
+Having a baby is a two-person job. The apps aren't. The partner hears everything second-hand, and the real decisions (the name, the pram, who does the night feed) end up in WhatsApp.
+
+## Names got couples in
+
+Picking a name is the one decision every couple enjoys arguing about. Each parent swipes on their own phone. Only the names you both like show up.
+
+<Decision chose="Launch with names only. It's fun, and it needs both of you." gaveUp="A full pregnancy tracker on day one." />
+
+## Couples stayed. Solo users didn't.
+
+A month after sign-up, **37%** of connected couples were still using BumpSync. Solo users: **4%**. Fewer than a third ever invited their partner.
+
+That changed the roadmap. More features wouldn't fix retention. Getting the second parent in would.
+
+## So 2.0 was built around the partner
+
+- **Invite during setup**, tracked as its own funnel. It used to sit in settings.
+- **A weekly email and nudges** timed to the week of pregnancy.
+- **Shared baby tracking after the birth**: feeds, sleep, nappies and growth. Your partner sees the 3am feed without asking.
+- **Products inside the prep lists**, where the decision is made, not on a separate offers page.
+
+<Decision chose="Ship 2.0 as one release, against a fixed baseline." gaveUp="Early wins. Finished features sat waiting for weeks." tilt={1.4} />
+
+## What live users broke
+
+- **7 of 32** invited partners were being dropped into new-user setup. Caught by a performance review, reproduced with a scripted QA run, fixed.
+- An early "lift" turned out to be iOS users on the old build. Every analytics event now carries the app version.
+- A parent said the bedtime suggestion ignored the last nap. Now it doesn't.

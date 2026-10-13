@@ -1,0 +1,25 @@
+---
+import Base from '../layouts/Base.astro';
+---
+<Base title="About" description="Adam Bell: product manager in Manchester who builds his own products with AI.">
+  <article class="wrap about">
+    <h1>Adam Bell</h1>
+    <p class="lede">Product manager in Manchester. Regulated fintech by day, my own products the rest of the time.</p>
+    <ul class="facts" role="list">
+      <li><b>Now</b><span>Product Owner, car finance at cinch</span></li>
+      <li><b>Before</b><span>Head of Product at Housemates, a student housing marketplace</span></li>
+      <li><b>Side</b><span>AGB Labs: four products, built solo with AI</span></li>
+    </ul>
+    <p class="contact"><a class="btn" href="mailto:hello@agb-labs.com">Email me</a> <span class="muted">CV on request.</span></p>
+  </article>
+</Base>
+
+<style>
+  .about { padding-top: clamp(2.5rem, 7vw, 5rem); }
+  .lede { font-size: 1.3rem; line-height: 1.45; color: var(--muted); max-width: 36ch; margin-top: 1rem; }
+  .facts { list-style: none; padding: 0; margin: 2.5rem 0 0; display: grid; gap: 0.75rem; max-width: 40rem; }
+  .facts li { display: grid; grid-template-columns: 5rem 1fr; gap: 1rem; background: var(--surface); border-radius: 16px; padding: 1rem 1.2rem; }
+  .facts b { font-family: var(--display); }
+  .contact { display: flex; align-items: center; gap: 1rem; margin-top: 2.5rem; }
+  .btn { display: inline-flex; align-items: center; min-height: 48px; padding: 0 1.4rem; border-radius: 999px; background: var(--ink); color: var(--bg); font-weight: 600; text-decoration: none; }
+</style>

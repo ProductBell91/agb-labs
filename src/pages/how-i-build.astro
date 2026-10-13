@@ -1,0 +1,146 @@
+---
+import Base from '../layouts/Base.astro';
+import TerminalDemo from '../components/demos/TerminalDemo.astro';
+
+const parts = [
+  {
+    t: 'Always on',
+    d: 'Agents run on a server that never sleeps. Sessions keep going when I close the app, and I pick them up on any device.',
+  },
+  {
+    t: 'Pushes when it matters',
+    d: 'My phone buzzes when an agent is blocked or finishes a long job. The notification opens that exact session.',
+  },
+  {
+    t: 'A QA API',
+    d: 'Agents test their own work in a real browser: click through the app, fill forms, take screenshots, read console errors.',
+  },
+  {
+    t: 'Skills for the hard parts',
+    d: 'Reusable playbooks for code review, security audits, analytics deep-dives and design passes. Same standard every time.',
+  },
+];
+const loop = [
+  { t: 'Spot it', d: 'A user complaint, a funnel drop or my own frustration.' },
+  { t: 'Write it down', d: 'Plan and decision log go in the repo first.' },
+  { t: 'Build', d: 'Agents write the code. I review what it does.' },
+  { t: 'Prove it', d: 'Tests, browser QA through the API, then my own phone.' },
+  { t: 'Measure', d: 'Events ship with the feature. Baseline set before.' },
+  { t: 'Call it', d: 'Keep, change or kill. The reason goes in the log.' },
+];
+const rails = [
+  { p: 'Mavropost', r: 'Can’t publish without a human tap. Risky claims are blocked before anyone sees them.' },
+  { p: 'BumpSync', r: 'Deleting a baby log takes two confirmations, after a parent lost one by mistake.' },
+  { p: 'LittleSpots', r: 'AI-read facts are labelled as guesses until a parent or owner confirms them.' },
+];
+---
+<Base title="How I build" description="Vibe Terminal: the always-on mobile platform Adam Bell built to ship products with AI coding agents from anywhere.">
+  <section class="wrap top">
+    <div class="top-copy">
+      <p class="kicker">Vibe Terminal</p>
+      <h1>My dev team fits in my pocket.</h1>
+      <p class="lede">
+        I built my own platform for building. AI coding agents run on a server around the clock. I direct
+        them from my phone, and they ping me when they need a decision.
+      </p>
+      <p class="aside">
+        This site started as a phone screenshot of a domain registrar, uploaded into a session. The
+        first version was live on my tailnet that evening.
+      </p>
+    </div>
+    <TerminalDemo />
+  </section>
+
+  <section class="wrap">
+    <h2 class="sr-only">What it does</h2>
+    <ul class="parts" role="list">
+      {parts.map((x) => (
+        <li><h3>{x.t}</h3><p>{x.d}</p></li>
+      ))}
+    </ul>
+  </section>
+
+  <section class="wrap qa">
+    <div>
+      <h2>QA that agents run themselves</h2>
+      <p class="muted">
+        A small HTTP API in front of headless Chromium. Any agent in any session can drive it, so “it works”
+        comes with a screenshot and a clean console.
+      </p>
+    </div>
+<pre class="code" tabindex="0"><code><span class="c"># launch, open the app, act like a user</span>
+curl -X POST $VT/api/browser/launch     -d '&#123;"session":"bumpsync"&#125;'
+curl -X POST $VT/api/browser/navigate   -d '&#123;"session":"bumpsync","url":"…/invite"&#125;'
+curl -X POST $VT/api/browser/fill       -d '&#123;"selector":"#email", …&#125;'
+curl -X POST $VT/api/browser/screenshot -d '&#123;"fullPage":true&#125;'
+
+<span class="c"># anything broken?</span>
+curl "$VT/api/browser/logs/bumpsync?type=error"</code></pre>
+  </section>
+
+  <section class="wrap">
+    <h2>The loop</h2>
+    <ol class="loop">
+      {loop.map((s) => (
+        <li><h3>{s.t}</h3><p>{s.d}</p></li>
+      ))}
+    </ol>
+  </section>
+
+  <section class="wrap rails-wrap">
+    <h2>Guardrails are product calls</h2>
+    <ul class="rails" role="list">
+      {rails.map((x) => (
+        <li><b>{x.p}</b><p>{x.r}</p></li>
+      ))}
+    </ul>
+  </section>
+</Base>
+
+<style>
+  .top {
+    display: grid; gap: 3rem; align-items: center;
+    padding-top: clamp(2.5rem, 7vw, 5rem);
+  }
+  @media (min-width: 900px) { .top { grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr); } }
+  .kicker { font-weight: 700; color: var(--muted); margin-bottom: 0.8rem; }
+  .top h1 { max-width: 12ch; }
+  .lede { font-size: 1.25rem; line-height: 1.5; max-width: 38ch; margin-top: 1.3rem; }
+  .aside { color: var(--muted); max-width: 44ch; margin-top: 1.4rem; padding-left: 1rem; border-left: 3px solid var(--rule); }
+
+  .parts {
+    list-style: none; padding: 0; margin: clamp(3rem, 7vw, 4.5rem) 0 0;
+    display: grid; gap: 0.75rem; grid-template-columns: repeat(auto-fit, minmax(min(100%, 15rem), 1fr));
+  }
+  .parts li { background: var(--surface); border-radius: 20px; padding: 1.3rem; }
+  .parts p { margin: 0.5rem 0 0; color: var(--muted); font-size: 0.95rem; }
+
+  .qa {
+    display: grid; gap: 1.5rem; align-items: center; margin-top: clamp(3.5rem, 8vw, 5.5rem);
+  }
+  @media (min-width: 900px) { .qa { grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.2fr); gap: 3rem; } }
+  .qa p { margin-top: 1rem; max-width: 40ch; }
+  .code {
+    margin: 0; background: #0c0f16; color: #d7dbe6; border-radius: 20px; padding: 1.3rem;
+    font-size: 0.8rem; line-height: 1.7; overflow-x: auto;
+    font-family: ui-monospace, 'SF Mono', Menlo, Consolas, monospace;
+  }
+  .code .c { color: #7d859a; }
+
+  .loop {
+    list-style: none; padding: 0; margin: 1.6rem 0 0; counter-reset: step;
+    display: grid; gap: 0.75rem; grid-template-columns: repeat(auto-fit, minmax(min(100%, 10.5rem), 1fr));
+  }
+  .loop li { counter-increment: step; background: var(--surface); border-radius: 20px; padding: 1.1rem; }
+  .loop li::before {
+    content: counter(step); display: grid; place-items: center; width: 28px; height: 28px; border-radius: 50%;
+    background: var(--ink); color: var(--bg); font-family: var(--display); font-weight: 700; font-size: 0.85rem; margin-bottom: 0.8rem;
+  }
+  .loop p { margin: 0.35rem 0 0; font-size: 0.92rem; color: var(--muted); }
+  section.wrap > h2 { margin-top: clamp(3.5rem, 8vw, 5.5rem); }
+
+  .rails { list-style: none; padding: 0; margin: 1.6rem 0 0; display: grid; gap: 0.75rem; grid-template-columns: repeat(auto-fit, minmax(min(100%, 16rem), 1fr)); }
+  .rails li { border-radius: 20px; padding: 1.2rem; background: var(--surface); }
+  .rails b { font-family: var(--display); font-size: 1.1rem; }
+  .rails p { margin: 0.4rem 0 0; color: var(--muted); font-size: 0.95rem; }
+</style>

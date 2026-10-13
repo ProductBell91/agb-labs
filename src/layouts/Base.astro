@@ -1,0 +1,106 @@
+---
+import '../styles/global.css';
+
+interface Props {
+  title: string;
+  description: string;
+}
+const { title, description } = Astro.props;
+const fullTitle = title === 'AGB Labs' ? 'AGB Labs | Products by Adam Bell' : `${title} | AGB Labs`;
+const canonical = new URL(Astro.url.pathname, Astro.site);
+const path = Astro.url.pathname;
+const nav = [
+  { href: '/#products', label: 'Products' },
+  { href: '/how-i-build/', label: 'How I build' },
+  { href: '/about/', label: 'About' },
+];
+---
+<!doctype html>
+<html lang="en-GB">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{fullTitle}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+    <meta property="og:title" content={fullTitle} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:type" content="website" />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400..800&family=Instrument+Sans:wght@400..700&display=swap"
+    />
+    <script type="application/ld+json" set:html={JSON.stringify({
+      '@context': 'https://schema.org',
+      '@type': 'Person',
+      name: 'Adam Guy Bell',
+      jobTitle: 'Product Manager',
+      url: 'https://agb-labs.com',
+      worksFor: { '@type': 'Organization', name: 'AGB Labs', url: 'https://agb-labs.com' },
+    })} />
+  </head>
+  <body>
+    <a class="sr-only skip" href="#main">Skip to content</a>
+    <header class="site-head">
+      <div class="wrap head-inner">
+        <a class="brand" href="/" aria-label="AGB Labs, home">
+          <svg class="brand-icon" viewBox="0 0 32 32" aria-hidden="true">
+            <rect x="2" y="2" width="13" height="13" rx="4" fill="#6b4a6e" />
+            <rect x="17" y="2" width="13" height="13" rx="4" fill="#f0405a" />
+            <rect x="2" y="17" width="13" height="13" rx="4" fill="#e16a47" />
+            <rect x="17" y="17" width="13" height="13" rx="4" fill="#2f8a57" />
+          </svg>
+          <span><b>AGB</b> Labs</span>
+        </a>
+        <nav aria-label="Main">
+          {nav.map((n) => (
+            <a href={n.href} aria-current={path.startsWith(n.href) && n.href !== '/#products' ? 'page' : undefined}>{n.label}</a>
+          ))}
+        </nav>
+      </div>
+    </header>
+    <main id="main">
+      <slot />
+    </main>
+    <footer class="site-foot wrap">
+      <p>AGB Labs, Manchester. Built by Adam Guy Bell with AI coding agents.</p>
+      <p><a href="mailto:hello@agb-labs.com">hello@agb-labs.com</a></p>
+    </footer>
+  </body>
+</html>
+
+<style>
+  .skip:focus {
+    position: fixed; left: 16px; top: 16px; width: auto; height: auto; clip: auto;
+    padding: 8px 12px; background: var(--surface); z-index: 20;
+  }
+  .site-head {
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    background: color-mix(in srgb, var(--bg) 82%, transparent);
+    backdrop-filter: saturate(1.4) blur(14px);
+    -webkit-backdrop-filter: saturate(1.4) blur(14px);
+    border-bottom: 1px solid color-mix(in srgb, var(--rule) 70%, transparent);
+  }
+  .head-inner { display: flex; align-items: center; justify-content: space-between; gap: 1rem; height: 60px; }
+  .brand {
+    display: flex; align-items: center; gap: 0.55rem;
+    font-family: var(--display); font-size: 1.1rem; color: var(--ink); text-decoration: none;
+  }
+  .brand b { font-weight: 800; }
+  .brand-icon { width: 26px; height: 26px; }
+  nav { display: flex; gap: clamp(0.9rem, 3vw, 1.8rem); font-size: 0.95rem; font-weight: 500; }
+  nav a { color: var(--muted); text-decoration: none; }
+  nav a:hover, nav a[aria-current='page'] { color: var(--ink); }
+  .site-foot {
+    display: flex; flex-wrap: wrap; justify-content: space-between; gap: 0.5rem 2rem;
+    margin-top: 6rem; padding-top: 1.5rem; padding-bottom: 3rem;
+    border-top: 1px solid var(--rule); color: var(--muted); font-size: 0.92rem;
+  }
+  .site-foot p { margin: 0; }
+</style>

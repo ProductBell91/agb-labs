@@ -1,0 +1,42 @@
+---
+// The site's one loud device: a product decision written on a sticky note,
+// with what was chosen and what it cost. On wide screens it sits in the margin
+// next to the paragraph that explains it; on phones it sits inline.
+interface Props {
+  chose: string;
+  gaveUp: string;
+  tilt?: number;
+}
+const { chose, gaveUp, tilt = -1.2 } = Astro.props;
+---
+<aside class="decision" style={`--tilt:${tilt}deg`} aria-label="Decision">
+  <p><strong>Chose:</strong> {chose}</p>
+  <p><strong>Gave up:</strong> {gaveUp}</p>
+</aside>
+
+<style>
+  .decision {
+    background: var(--note);
+    color: var(--note-ink);
+    font-family: var(--display);
+    font-size: 0.98rem;
+    line-height: 1.35;
+    padding: 1rem 1.1rem 1.1rem;
+    margin: 1.6rem 0;
+    max-width: 22rem;
+    transform: rotate(var(--tilt));
+    box-shadow: 0 1px 0 rgba(0, 0, 0, 0.04), 2px 8px 14px -6px var(--note-shadow);
+  }
+  .decision p { margin: 0; }
+  .decision p + p { margin-top: 0.55rem; }
+  .decision strong { font-weight: 750; }
+
+  @media (min-width: 1120px) {
+    .decision {
+      float: right;
+      clear: right;
+      width: 15.5rem;
+      margin: 0.3rem -19.5rem 1.5rem 0;
+    }
+  }
+</style>

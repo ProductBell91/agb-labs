@@ -1,0 +1,182 @@
+---
+import Base from '../layouts/Base.astro';
+import Stage from '../components/Stage.astro';
+import SwipeDemo from '../components/demos/SwipeDemo.astro';
+import SongDemo from '../components/demos/SongDemo.astro';
+import TrustDemo from '../components/demos/TrustDemo.astro';
+import ApproveDemo from '../components/demos/ApproveDemo.astro';
+
+const apps = [
+  { id: 'bumpsync', name: 'BumpSync', bg: '#6b4a6e', glyph: 'heart' },
+  { id: 'hushsync', name: 'HushSync', bg: '#f0405a', glyph: 'note' },
+  { id: 'littlespots', name: 'LittleSpots', bg: '#e16a47', glyph: 'pin' },
+  { id: 'mavropost', name: 'Mavropost', bg: '#2f8a57', glyph: 'check' },
+];
+const lab: { name: string; glyph: string; line: string; href?: string }[] = [
+  { name: 'DealWatch', glyph: 'tag', line: 'Tracks the exact item and size I want. It only trusts a price it has seen on the shop’s own page.' },
+  { name: 'JobScout', glyph: 'search', line: 'Reads the job boards, scores each role against my CV and learns from my votes.' },
+  { name: 'HomeBase', glyph: 'home', line: 'The hub for my home automation projects.' },
+  { name: 'Vibe Terminal', href: '/how-i-build/', glyph: 'term', line: 'My build platform. Coding agents on my phone, any time.' },
+];
+const glyphs: Record<string, string> = {
+  heart: '<path d="M12 20s-7-4.3-9-8.6C1.6 8.2 3.6 5 6.8 5c1.9 0 3.4 1 4.2 2.5C11.8 6 13.3 5 15.2 5c3.2 0 5.2 3.2 3.8 6.4C17 15.7 12 20 12 20z" fill="#fff"/>',
+  note: '<path d="M9 18V6l10-2v12" stroke="#fff" stroke-width="2.2" fill="none" stroke-linejoin="round"/><circle cx="6.5" cy="18" r="2.6" fill="#fff"/><circle cx="16.5" cy="16" r="2.6" fill="#fff"/>',
+  pin: '<path d="M12 21s-6-6-6-11a6 6 0 0 1 12 0c0 5-6 11-6 11z" fill="#fff"/><circle cx="12" cy="10" r="2.3" fill="#e16a47"/>',
+  check: '<path d="M5 12.5l4.2 4.2L19 7" stroke="#fff" stroke-width="2.8" fill="none" stroke-linecap="round" stroke-linejoin="round"/>',
+  tag: '<path d="M3 12V4h8l10 10-8 8L3 12z" stroke="currentColor" stroke-width="2" fill="none" stroke-linejoin="round"/><circle cx="7.5" cy="8" r="1.6" fill="currentColor"/>',
+  search: '<circle cx="10.5" cy="10.5" r="6" stroke="currentColor" stroke-width="2" fill="none"/><path d="M15 15l5 5" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/>',
+  home: '<path d="M4 11l8-7 8 7v9h-5v-6H9v6H4z" stroke="currentColor" stroke-width="2" fill="none" stroke-linejoin="round"/>',
+  term: '<rect x="3" y="4" width="18" height="16" rx="3" stroke="currentColor" stroke-width="2" fill="none"/><path d="M7 9l3 3-3 3M12.5 15H17" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round"/>',
+};
+---
+<Base title="AGB Labs" description="Four products built solo by product manager Adam Bell with AI coding agents. Every one is playable on the page.">
+  <section class="wrap hero">
+    <div class="hero-copy">
+      <h1><span class="l">I decide what to build.</span> <span class="l">Then I build it.</span></h1>
+      <p class="lede">
+        Adam Bell, product manager and solo builder.{' '}
+        <a href="/about/">More about me</a>
+      </p>
+    </div>
+    <nav class="home-screen" aria-label="Jump to a product">
+      {apps.map((a) => (
+        <a class="app" href={`#${a.id}`}>
+          <span class="app-icon" style={`background:${a.bg}`}>
+            <svg viewBox="0 0 24 24" aria-hidden="true" set:html={glyphs[a.glyph]} />
+          </span>
+          <span class="app-name">{a.name}</span>
+        </a>
+      ))}
+    </nav>
+  </section>
+
+  <div class="wrap" id="products">
+    <Stage
+      id="bumpsync"
+      name="BumpSync"
+      status="Live on iOS, Android and web"
+      headline="A pregnancy app for both parents, not just one."
+      bet="Start with the decision couples enjoy most. Both parents swipe on names, and only the matches show."
+      result="Couples who connected were <strong>9× more likely</strong> to still be using it a month later. So 2.0 was rebuilt around getting the second parent in."
+      bg="#e7f5ee" fg="#3f2742" accent="#9a4f7d" muted="#7b6680"
+      caseHref="/work/bumpsync/"
+      siteHref="https://bumpsync.app" siteLabel="bumpsync.app"
+      stack={['React', 'Supabase', 'Capacitor', 'Amplitude']}
+    >
+      <SwipeDemo />
+    </Stage>
+
+    <Stage
+      id="hushsync"
+      name="HushSync"
+      status="Live"
+      headline="Hum a lullaby. Get back a finished song."
+      bet="Every parent makes up songs at 3am. HushSync turns that half-remembered tune into a finished song you can keep."
+      resultLabel="How it works" result="Each model does the job it’s best at. Gemini hears the melody, Claude writes the words, Lyria composes, and Gemini Image paints the cover."
+      bg="#1e2440" fg="#f7fbff" accent="#ffd84d" muted="#aab3d6"
+      siteHref="https://hushsync.app" siteLabel="hushsync.app"
+      stack={['React', 'Supabase', 'Claude', 'Gemini', 'Lyria', 'Stripe']}
+    >
+      <SongDemo />
+    </Stage>
+
+    <Stage
+      id="littlespots"
+      name="LittleSpots"
+      status="Live in Greater Manchester"
+      headline="Where can I actually eat out with a baby?"
+      bet="An empty directory is a dead one. So fill it from public data first, let AI read each venue’s menus and photos, then ask the owners."
+      result="<strong>6,725 venues</strong> live across Greater Manchester, from 17,106 found. AI guesses are labelled as guesses until an owner confirms them."
+      bg="#ffe9dc" fg="#2f2420" accent="#c4502f" muted="#7d6458"
+      siteHref="https://littlespots.co.uk" siteLabel="littlespots.co.uk"
+      stack={['Next.js', 'SQLite', 'Gemini', 'Firebase']}
+    >
+      <TrustDemo />
+    </Stage>
+
+    <Stage
+      id="mavropost"
+      name="Mavropost"
+      status="In beta"
+      headline="An AI marketing team that can’t post without you."
+      bet="A one-person product can’t pay for a marketer, and it can’t risk an AI posting something wrong. So the AI drafts, and a person decides."
+      result="It plans the week, blocks risky claims before anyone sees them, and publishes on one tap. It runs BumpSync’s Instagram."
+      bg="#17201b" fg="#f1f5ef" accent="#7fd3a0" muted="#9fb0a5"
+      stack={['Node', 'SQLite', 'Gemini', 'Claude Haiku', 'Instagram API']}
+    >
+      <ApproveDemo />
+    </Stage>
+  </div>
+
+  <section class="wrap lab" aria-labelledby="lab-title">
+    <h2 id="lab-title">The workshop</h2>
+    <p class="muted lab-intro">Private tools I use every week.</p>
+    <ul class="lab-grid" role="list">
+      {lab.map((l) => (
+        <li>
+          <svg class="lab-icon" viewBox="0 0 24 24" aria-hidden="true" set:html={glyphs[l.glyph]} />
+          <h3>{l.href ? <a href={l.href}>{l.name}</a> : l.name}</h3>
+          <p>{l.line}</p>
+        </li>
+      ))}
+    </ul>
+  </section>
+
+  <section class="wrap cta">
+    <h2>Hiring a product manager who ships?</h2>
+    <p class="cta-row">
+      <a class="cta-btn" href="mailto:hello@agb-labs.com">Email me</a>
+      <a class="cta-link" href="/how-i-build/">See how I build</a>
+    </p>
+  </section>
+</Base>
+
+<style>
+  .hero {
+    display: grid;
+    gap: 2.5rem;
+    align-items: center;
+    padding-top: clamp(2.5rem, 8vw, 5.5rem);
+    padding-bottom: clamp(1.5rem, 5vw, 3rem);
+  }
+  @media (min-width: 900px) { .hero { grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr); } }
+  .hero h1 { max-width: 13ch; }
+  .hero h1 .l { display: block; }
+  .lede { font-size: 1.2rem; line-height: 1.5; color: var(--muted); max-width: 40ch; margin-top: 1.4rem; }
+
+  .home-screen {
+    display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem 0.75rem;
+    background: var(--surface); border-radius: 30px; padding: 1.4rem 1.1rem; box-shadow: var(--shadow);
+    max-width: 460px; width: 100%; justify-self: center;
+  }
+  .app { display: grid; justify-items: center; gap: 0.45rem; text-decoration: none; color: var(--ink); font-size: 0.8rem; font-weight: 600; }
+  .app-icon {
+    width: min(72px, 17vw); aspect-ratio: 1; border-radius: 22%; display: grid; place-items: center;
+    box-shadow: inset 0 -3px 0 rgba(0,0,0,0.12); transition: transform 0.18s cubic-bezier(.2,1.4,.4,1);
+  }
+  .app-icon svg { width: 52%; height: 52%; }
+  .app:hover .app-icon, .app:focus-visible .app-icon { transform: translateY(-3px) scale(1.05); }
+  .app:focus-visible { outline: none; }
+  .app:focus-visible .app-icon { outline: 2px solid var(--link); outline-offset: 3px; }
+
+  .lab { margin-top: clamp(4rem, 9vw, 6rem); }
+  .lab-intro { margin-top: 0.6rem; }
+  .lab-grid {
+    list-style: none; padding: 0; margin: 1.8rem 0 0;
+    display: grid; gap: 1rem; grid-template-columns: repeat(auto-fit, minmax(min(100%, 15rem), 1fr));
+  }
+  .lab-grid li { background: var(--surface); border-radius: 20px; padding: 1.2rem; }
+  .lab-icon { width: 28px; height: 28px; color: var(--muted); margin-bottom: 0.8rem; }
+  .lab-grid h3 { font-size: 1.1rem; }
+  .lab-grid h3 a { color: inherit; }
+  .lab-grid p { margin: 0.4rem 0 0; font-size: 0.93rem; color: var(--muted); }
+
+  .cta { margin-top: clamp(4rem, 9vw, 6rem); }
+  .cta h2 { max-width: 18ch; }
+  .cta-row { display: flex; flex-wrap: wrap; align-items: center; gap: 1.2rem; margin-top: 1.4rem; }
+  .cta-btn {
+    display: inline-flex; align-items: center; min-height: 48px; padding: 0 1.4rem; border-radius: 999px;
+    background: var(--ink); color: var(--bg); font-weight: 600; text-decoration: none;
+  }
+  .cta-link { font-weight: 600; }
+</style>

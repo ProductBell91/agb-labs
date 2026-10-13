@@ -1,0 +1,78 @@
+---
+import { getCollection, render } from 'astro:content';
+import Base from '../../layouts/Base.astro';
+
+export async function getStaticPaths() {
+  const entries = await getCollection('work', (e) => e.data.published);
+  return entries.map((entry) => ({ params: { slug: entry.id }, props: { entry } }));
+}
+
+const { entry } = Astro.props;
+const { Content } = await render(entry);
+const d = entry.data;
+const statusLabel = { live: 'Live', beta: 'In beta', internal: 'Internal tool' }[d.status];
+---
+<Base title={d.title} description={d.summary}>
+  <article class="case">
+    <header class="wrap case-head">
+      <p class="back"><a href={`/#${entry.id}`}>Back to products</a></p>
+      <h1>{d.title}</h1>
+      <p class="tagline">{d.tagline}</p>
+      <p class="meta">
+        <span>{statusLabel}</span><span>{d.timeframe}</span><span>{d.role}</span>
+        {d.links.map((l) => <a href={l.href} rel="noopener">{l.label}</a>)}
+      </p>
+    </header>
+
+    {d.shots.length > 0 && (
+      <div class="shots" tabindex="0" aria-label="Screens from the app">
+        {d.shots.map((s) => (
+          <figure class="shot"><img src={s.src} alt={s.alt} width="412" height="892" loading="lazy" /></figure>
+        ))}
+      </div>
+    )}
+
+    {d.metrics.length > 0 && (
+      <ul class="wrap metrics" aria-label="Results">
+        {d.metrics.map((m) => (
+          <li><span class="m-value">{m.value}</span><span class="m-label">{m.label}</span></li>
+        ))}
+      </ul>
+    )}
+
+    <div class="wrap">
+      <div class="prose body"><Content /></div>
+      <p class="stack">Built with {d.stack.join(', ')}.</p>
+    </div>
+  </article>
+</Base>
+
+<style>
+  .case-head { padding-top: 2.5rem; }
+  .back { font-size: 0.95rem; font-weight: 600; margin-bottom: 1.2rem; }
+  .back a { color: var(--muted); text-decoration: none; }
+  .tagline { font-size: 1.35rem; line-height: 1.4; color: var(--muted); margin-top: 0.8rem; max-width: 34ch; }
+  .meta { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-top: 1.4rem; font-size: 0.88rem; }
+  .meta > * { padding: 0.3rem 0.75rem; border-radius: 999px; background: var(--surface); }
+  .meta a { font-weight: 600; }
+
+  .shots {
+    display: flex; gap: 1rem; overflow-x: auto; scroll-snap-type: x mandatory;
+    padding: 2rem max(var(--gutter), calc((100vw - 76rem) / 2 + var(--gutter))) 1.5rem;
+    scrollbar-width: thin;
+  }
+  .shot { margin: 0; flex: none; width: clamp(180px, 42vw, 240px); scroll-snap-align: start; }
+  .shot img { border-radius: 22px; box-shadow: var(--shadow); background: #fff; }
+
+  .metrics {
+    list-style: none; margin-top: 1.5rem; margin-bottom: 0;
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 14rem), 1fr)); gap: 1rem;
+  }
+  .metrics li { background: var(--surface); border-radius: 20px; padding: 1.2rem; display: flex; flex-direction: column; gap: 0.35rem; }
+  .m-value { font-family: var(--display); font-size: 2rem; font-weight: 750; letter-spacing: -0.035em; line-height: 1; }
+  .m-label { color: var(--muted); font-size: 0.92rem; line-height: 1.4; }
+
+  .body { margin-top: 1rem; }
+  .body::after { content: ''; display: block; clear: both; }
+  .stack { margin-top: 3rem; color: var(--muted); font-size: 0.9rem; }
+</style>

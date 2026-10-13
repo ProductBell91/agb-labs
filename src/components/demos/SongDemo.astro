@@ -1,0 +1,197 @@
+---
+// HushSync: the real pipeline is hum → Gemini transcribes → Claude writes
+// lyrics → Lyria composes → Claude + Gemini Image paint the cover. This is a
+// browser-only simulation of that flow; the tune plays through Web Audio.
+---
+<div class="hs" data-song>
+  <form class="hs-input" data-form>
+    <label for="hs-name">Baby’s name</label>
+    <div class="hs-row">
+      <input id="hs-name" name="name" type="text" maxlength="14" value="Ivy" autocomplete="off" required />
+      <button type="submit" class="hs-go" data-go>
+        <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="9" y="3" width="6" height="11" rx="3" fill="currentColor"/><path d="M5 11a7 7 0 0 0 14 0M12 18v3" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round"/></svg>
+        Hum a tune
+      </button>
+    </div>
+  </form>
+
+  <ol class="hs-steps" data-steps>
+    <li data-step="0">
+      <p class="hs-model">Gemini listens</p>
+      <svg class="hs-contour" viewBox="0 0 300 60" preserveAspectRatio="none" aria-label="Melody contour">
+        <polyline points="0,40 25,32 50,32 75,20 100,20 125,28 150,36 175,30 200,22 225,26 250,34 275,40 300,44" />
+      </svg>
+    </li>
+    <li data-step="1">
+      <p class="hs-model">Claude writes the words</p>
+      <p class="hs-lyrics" data-lyrics></p>
+    </li>
+    <li data-step="2">
+      <p class="hs-model">Lyria composes the music</p>
+      <div class="hs-wave" aria-hidden="true">{Array.from({ length: 28 }, (_, k) => <i style={`--k:${k}`}></i>)}</div>
+    </li>
+    <li data-step="3">
+      <p class="hs-model">Claude and Gemini paint the cover</p>
+      <div class="hs-result">
+        <div class="hs-cover" data-cover>
+          <span class="sun"></span><span class="hill a"></span><span class="hill b"></span>
+          <p data-cover-title></p>
+        </div>
+        <button type="button" class="hs-play" data-play>Play the lullaby</button>
+      </div>
+    </li>
+  </ol>
+  <p class="hs-note">This is a simulation of the real pipeline, made for this page. The tune is played by your browser.</p>
+</div>
+
+<style>
+  .hs {
+    background: var(--hush-paper); color: var(--hush-ink);
+    border: 3px solid var(--hush-ink); border-radius: 26px; box-shadow: 6px 6px 0 var(--hush-ink);
+    padding: 1.3rem; max-width: 460px; margin-inline: auto;
+  }
+  .hs-input label { font-weight: 700; font-size: 0.9rem; }
+  .hs-row { display: flex; gap: 0.5rem; margin-top: 0.4rem; }
+  .hs-row input {
+    flex: 1; min-width: 0; font: inherit; padding: 0.6rem 0.9rem; border-radius: 14px;
+    border: 2px solid var(--hush-ink); background: #fff; color: var(--hush-ink);
+  }
+  .hs-go {
+    display: inline-flex; align-items: center; gap: 0.35rem; cursor: pointer; white-space: nowrap;
+    border: 2px solid var(--hush-ink); border-radius: 999px; padding: 0 1rem; min-height: 46px;
+    background: linear-gradient(180deg, var(--hush-yellow), var(--hush-orange)); color: var(--hush-ink); font-weight: 700;
+    box-shadow: 0 3px 0 var(--hush-ink);
+  }
+  .hs-go svg { width: 18px; height: 18px; }
+  .hs-go:active { transform: translateY(2px); box-shadow: 0 1px 0 var(--hush-ink); }
+  .hs-go[disabled] { opacity: 0.6; cursor: progress; }
+
+  .hs-steps { list-style: none; margin: 1.2rem 0 0; padding: 0; display: grid; gap: 0.7rem; }
+  .hs-steps li {
+    border-radius: 16px; padding: 0.75rem 0.9rem; background: #fff;
+    border: 2px solid color-mix(in srgb, var(--hush-ink) 14%, transparent);
+    opacity: 0.4; transition: opacity 0.3s, border-color 0.3s;
+  }
+  .hs-steps li.on { opacity: 1; border-color: var(--hush-ink); }
+  .hs-model { margin: 0; font-weight: 700; font-size: 0.92rem; display: flex; align-items: center; gap: 0.5rem; }
+  .hs-model::before { content: ''; width: 10px; height: 10px; border-radius: 50%; background: color-mix(in srgb, var(--hush-ink) 20%, transparent); }
+  li:nth-child(1).on .hs-model::before { background: var(--hush-blue); }
+  li:nth-child(2).on .hs-model::before { background: var(--hush-violet); }
+  li:nth-child(3).on .hs-model::before { background: var(--hush-red); }
+  li:nth-child(4).on .hs-model::before { background: var(--hush-orange); }
+
+  .hs-contour { width: 100%; height: 36px; margin-top: 0.4rem; }
+  .hs-contour polyline { fill: none; stroke: var(--hush-blue); stroke-width: 3; stroke-linecap: round; stroke-linejoin: round; stroke-dasharray: 400; stroke-dashoffset: 400; }
+  li.on .hs-contour polyline { transition: stroke-dashoffset 1.1s ease; stroke-dashoffset: 0; }
+  .hs-lyrics { margin: 0.4rem 0 0; font-size: 0.92rem; white-space: pre-line; min-height: 1.4em; font-style: italic; }
+  .hs-wave { display: flex; align-items: center; gap: 3px; height: 34px; margin-top: 0.4rem; }
+  .hs-wave i { flex: 1; height: 20%; border-radius: 2px; background: var(--hush-red); opacity: 0.85; }
+  li.on .hs-wave i { animation: wave 0.9s ease-in-out infinite alternate; animation-delay: calc(var(--k) * -73ms); }
+  .hs.playing li.on .hs-wave i { animation-duration: 0.45s; }
+  @keyframes wave { from { height: 18%; } to { height: 95%; } }
+  .hs-result { display: flex; align-items: center; gap: 1rem; margin-top: 0.5rem; }
+  .hs-cover {
+    position: relative; width: 104px; aspect-ratio: 1; border-radius: 14px; overflow: hidden; flex: none;
+    background: linear-gradient(160deg, var(--hush-violet), var(--hush-blue)); border: 2px solid var(--hush-ink);
+  }
+  .hs-cover .sun { position: absolute; width: 34px; height: 34px; border-radius: 50%; background: var(--hush-yellow); top: 14px; right: 16px; box-shadow: 0 0 18px var(--hush-yellow); }
+  .hs-cover .hill { position: absolute; border-radius: 50%; }
+  .hs-cover .a { width: 140px; height: 70px; background: var(--hush-red); left: -30px; bottom: -34px; }
+  .hs-cover .b { width: 120px; height: 60px; background: var(--hush-orange); right: -40px; bottom: -36px; }
+  .hs-cover p { position: absolute; left: 8px; bottom: 6px; margin: 0; color: #fff; font-weight: 800; font-size: 12px; line-height: 1.1; text-shadow: 0 1px 2px rgba(0,0,0,.35); }
+  .hs-play {
+    cursor: pointer; border: 2px solid var(--hush-ink); border-radius: 999px; background: #fff; color: var(--hush-ink);
+    font-weight: 700; padding: 0 1rem; min-height: 44px;
+  }
+  .hs-play[disabled] { opacity: 0.45; cursor: default; }
+  .hs-note { margin: 0.9rem 0 0; font-size: 0.8rem; opacity: 0.7; }
+</style>
+
+<script>
+  const wait = (ms: number) => new Promise((r) => setTimeout(r, ms));
+
+  // An original, simple lullaby in C major (MIDI note, beats)
+  const TUNE: [number, number][] = [
+    [64, 1], [67, 1], [72, 2], [71, 1], [69, 1], [67, 2],
+    [65, 1], [67, 1], [69, 1], [67, 1], [64, 3], [0, 1],
+    [64, 1], [67, 1], [72, 2], [74, 1], [72, 1], [69, 2],
+    [67, 1], [65, 1], [64, 1], [62, 1], [60, 4],
+  ];
+
+  function play(onEnd: () => void) {
+    const AC = window.AudioContext || (window as any).webkitAudioContext;
+    const ctx: AudioContext = new AC();
+    const beat = 0.42;
+    let t = ctx.currentTime + 0.1;
+    const master = ctx.createGain();
+    master.gain.value = 0.18;
+    master.connect(ctx.destination);
+    for (const [note, beats] of TUNE) {
+      const dur = beats * beat;
+      if (note) {
+        const f = 440 * Math.pow(2, (note - 69) / 12);
+        for (const [mult, vol] of [[1, 1], [2, 0.18]] as const) {
+          const o = ctx.createOscillator();
+          const g = ctx.createGain();
+          o.type = 'sine';
+          o.frequency.value = f * mult;
+          g.gain.setValueAtTime(0, t);
+          g.gain.linearRampToValueAtTime(vol, t + 0.04);
+          g.gain.exponentialRampToValueAtTime(0.001, t + dur * 0.98);
+          o.connect(g).connect(master);
+          o.start(t);
+          o.stop(t + dur);
+        }
+      }
+      t += dur;
+    }
+    setTimeout(() => { ctx.close(); onEnd(); }, (t - ctx.currentTime) * 1000 + 200);
+  }
+
+  document.querySelectorAll<HTMLElement>('[data-song]').forEach((root) => {
+    const form = root.querySelector<HTMLFormElement>('[data-form]')!;
+    const go = root.querySelector<HTMLButtonElement>('[data-go]')!;
+    const steps = [...root.querySelectorAll<HTMLElement>('[data-step]')];
+    const lyricsEl = root.querySelector<HTMLElement>('[data-lyrics]')!;
+    const title = root.querySelector<HTMLElement>('[data-cover-title]')!;
+    const playBtn = root.querySelector<HTMLButtonElement>('[data-play]')!;
+    playBtn.disabled = true;
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const raw = (new FormData(form).get('name') as string).trim() || 'Ivy';
+      const name = raw.charAt(0).toUpperCase() + raw.slice(1);
+      const lyrics = `Hush now, ${name}, the moon is low,\nthe stars are counting soft and slow.\nThe day was big, the night is kind,\nleave all the busy hours behind.`;
+      go.disabled = true;
+      playBtn.disabled = true;
+      steps.forEach((s) => s.classList.remove('on'));
+      lyricsEl.textContent = '';
+
+      steps[0].classList.add('on');
+      await wait(1300);
+      steps[1].classList.add('on');
+      for (let k = 0; k <= lyrics.length; k += 2) {
+        lyricsEl.textContent = lyrics.slice(0, k);
+        await wait(18);
+      }
+      await wait(250);
+      steps[2].classList.add('on');
+      await wait(1300);
+      title.textContent = `${name}’s Lullaby`;
+      steps[3].classList.add('on');
+      go.disabled = false;
+      playBtn.disabled = false;
+    });
+
+    playBtn.addEventListener('click', () => {
+      playBtn.disabled = true;
+      playBtn.textContent = 'Playing…';
+      root.classList.add('playing');
+      play(() => {
+        root.classList.remove('playing');
+        playBtn.disabled = false;
+        playBtn.textContent = 'Play the lullaby';
+      });
+    });
+  });
+</script>

@@ -1,0 +1,181 @@
+---
+// BumpSync: swipe on names; your partner has swiped privately already.
+// Only names you both like show up as matches. Then the number that mattered.
+const names = [
+  { n: 'Aoife', o: 'Irish', m: 'Radiance, beauty' },
+  { n: 'Theo', o: 'Greek', m: 'Gift of God' },
+  { n: 'Isla', o: 'Scottish', m: 'After the Hebridean island' },
+  { n: 'Otis', o: 'German', m: 'Wealth, fortune' },
+  { n: 'Mabel', o: 'English', m: 'Lovable' },
+  { n: 'Elodie', o: 'French', m: 'Foreign riches' },
+  { n: 'Arlo', o: 'English', m: 'Fortified hill' },
+  { n: 'Nia', o: 'Welsh', m: 'Bright, radiant' },
+  { n: 'Felix', o: 'Latin', m: 'Lucky, happy' },
+  { n: 'Rory', o: 'Irish', m: 'Red king' },
+];
+const partnerLikes = ['Aoife', 'Isla', 'Mabel', 'Arlo', 'Felix', 'Rory'];
+---
+<div class="bs" data-swipe data-partner={JSON.stringify(partnerLikes)}>
+  <div class="phone">
+    <div class="phone-screen bs-screen">
+      <div class="bs-top">
+        <span class="bs-logo"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21s-7.5-4.6-9.6-9.2C.9 8.4 3 5 6.4 5c2 0 3.6 1.1 4.6 2.7C12 6.1 13.6 5 15.6 5 19 5 21.1 8.4 19.6 11.8 17.5 16.4 12 21 12 21z" fill="currentColor"/></svg>BumpSync</span>
+        <span class="bs-partner" data-partner-status>Sam has swiped</span>
+      </div>
+      <div class="bs-matchbar"><b>Your matches</b> <span data-match-count>0</span></div>
+      <div class="bs-deck" data-deck aria-live="polite">
+        {names.map((x, i) => (
+          <article class="bs-card" data-name={x.n} style={`--i:${i}`} hidden={i > 0}>
+            <p class="bs-name">{x.n}</p>
+            <p class="bs-origin">{x.o} origin</p>
+            <p class="bs-meaning">{x.m}</p>
+          </article>
+        ))}
+        <div class="bs-done" data-done hidden>
+          <p class="bs-done-title">All swiped</p>
+          <p data-done-list></p>
+          <button type="button" class="bs-again" data-reset>Swipe again</button>
+        </div>
+      </div>
+      <div class="bs-actions">
+        <button type="button" class="bs-btn no" data-vote="no" aria-label="Not for us">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/></svg>
+        </button>
+        <button type="button" class="bs-btn yes" data-vote="yes" aria-label="Love it">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21s-7.5-4.6-9.6-9.2C.9 8.4 3 5 6.4 5c2 0 3.6 1.1 4.6 2.7C12 6.1 13.6 5 15.6 5 19 5 21.1 8.4 19.6 11.8 17.5 16.4 12 21 12 21z" fill="currentColor"/></svg>
+        </button>
+      </div>
+      <div class="bs-toast" data-toast role="status" hidden></div>
+    </div>
+  </div>
+  <p class="bs-hint">Tap the heart or the cross, or use your arrow keys.</p>
+
+  <figure class="bs-chart">
+    <figcaption>Still active 28 days after sign-up</figcaption>
+    <div class="row"><span class="lbl">Partner connected</span><span class="bar"><i style="--w:37%"></i></span><b>37%</b></div>
+    <div class="row"><span class="lbl">Using it alone</span><span class="bar"><i style="--w:4%"></i></span><b>4%</b></div>
+  </figure>
+</div>
+
+<style>
+  .bs { display: grid; gap: 1.2rem; justify-items: center; }
+  .bs-screen { background: var(--bump-paper); color: var(--bump-plum); font-family: system-ui, sans-serif; }
+  .bs-top { display: flex; justify-content: space-between; align-items: center; padding: 18px 16px 10px; font-size: 13px; }
+  .bs-logo { display: inline-flex; align-items: center; gap: 6px; font-weight: 800; font-size: 16px; }
+  .bs-logo svg { width: 18px; height: 18px; }
+  .bs-partner { white-space: nowrap; font-size: 11px; background: var(--bump-mint); padding: 3px 8px; border-radius: 999px; }
+  .bs-matchbar {
+    margin: 4px 14px 10px; padding: 10px 14px; border-radius: 14px;
+    background: linear-gradient(90deg, var(--bump-mint), var(--bump-sky)); font-size: 14px;
+    display: flex; justify-content: space-between;
+  }
+  .bs-deck { position: relative; flex: 1; margin: 0 14px; }
+  .bs-card, .bs-done {
+    position: absolute; inset: 0; border-radius: 22px; background: var(--bump-sky);
+    display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center;
+    padding: 20px; box-shadow: 0 10px 24px -14px rgba(107, 74, 110, 0.6);
+    transition: transform 0.32s cubic-bezier(.2,.8,.2,1), opacity 0.32s;
+  }
+  .bs-card:nth-child(3n+2) { background: var(--bump-peach); }
+  .bs-card:nth-child(3n) { background: #e6d5f0; }
+  .bs-card.out-yes { transform: translateX(120%) rotate(14deg); opacity: 0; }
+  .bs-card.out-no { transform: translateX(-120%) rotate(-14deg); opacity: 0; }
+  .bs-name { font-size: 46px; font-weight: 800; margin: 0; letter-spacing: -0.02em; }
+  .bs-origin { margin: 6px 0 0; font-size: 14px; }
+  .bs-meaning { margin: 4px 0 0; font-size: 13px; opacity: 0.75; }
+  .bs-done { background: #fff; }
+  .bs-done-title { font-weight: 800; font-size: 22px; margin: 0 0 6px; }
+  .bs-done p { margin: 0 0 12px; font-size: 14px; }
+  .bs-again { border: 0; background: var(--bump-plum); color: #fff; padding: 10px 16px; border-radius: 999px; cursor: pointer; font-size: 14px; }
+  .bs-actions { display: flex; justify-content: center; gap: 22px; padding: 16px 0 22px; }
+  .bs-btn {
+    width: 62px; height: 62px; border-radius: 50%; display: grid; place-items: center; cursor: pointer;
+    border: 2px solid #8a98a6; background: #fff; color: #4f6472; transition: transform 0.15s;
+  }
+  .bs-btn.yes { border: 0; background: var(--bump-peach); color: var(--bump-plum); }
+  .bs-btn:active { transform: scale(0.92); }
+  .bs-btn svg { width: 26px; height: 26px; }
+  .bs-toast {
+    position: absolute; left: 14px; right: 14px; top: 42%; padding: 18px; border-radius: 18px; text-align: center;
+    background: var(--bump-plum); color: #fff; font-weight: 700; font-size: 18px;
+    box-shadow: 0 18px 40px -12px rgba(0,0,0,.45); animation: pop 0.35s cubic-bezier(.2,1.4,.4,1);
+  }
+  .bs-toast :global(small) { display: block; font-weight: 500; font-size: 13px; opacity: 0.85; margin-top: 4px; }
+  @keyframes pop { from { transform: scale(0.7); opacity: 0; } }
+  .bs-hint { margin: 0; font-size: 0.85rem; color: var(--st-muted); }
+
+  .bs-chart { margin: 0.4rem 0 0; width: min(100%, 420px); }
+  .bs-chart figcaption { font-weight: 700; font-size: 0.95rem; margin-bottom: 0.6rem; }
+  .row { display: grid; grid-template-columns: 8.5rem 1fr 3rem; align-items: center; gap: 0.6rem; font-size: 0.9rem; margin-top: 0.4rem; }
+  .row b { text-align: right; font-family: var(--display); font-size: 1.15rem; }
+  .bar { height: 12px; border-radius: 6px; background: color-mix(in srgb, var(--st-fg) 10%, transparent); overflow: hidden; }
+  .bar i { display: block; height: 100%; width: var(--w); background: var(--st-fg); border-radius: 6px; }
+  .row + .row .bar i { background: var(--st-muted); }
+</style>
+
+<script>
+  document.querySelectorAll<HTMLElement>('[data-swipe]').forEach((root) => {
+    const partner = new Set<string>(JSON.parse(root.dataset.partner || '[]'));
+    const cards = [...root.querySelectorAll<HTMLElement>('.bs-card')];
+    const done = root.querySelector<HTMLElement>('[data-done]')!;
+    const doneList = root.querySelector<HTMLElement>('[data-done-list]')!;
+    const countEl = root.querySelector<HTMLElement>('[data-match-count]')!;
+    const toast = root.querySelector<HTMLElement>('[data-toast]')!;
+    let i = 0;
+    let matches: string[] = [];
+    let toastTimer = 0;
+
+    const showToast = (html: string) => {
+      toast.innerHTML = html;
+      toast.hidden = false;
+      clearTimeout(toastTimer);
+      toastTimer = window.setTimeout(() => (toast.hidden = true), 1500);
+    };
+
+    const vote = (yes: boolean) => {
+      const card = cards[i];
+      if (!card) return;
+      const name = card.dataset.name!;
+      card.classList.add(yes ? 'out-yes' : 'out-no');
+      if (yes && partner.has(name)) {
+        matches.push(name);
+        countEl.textContent = String(matches.length);
+        showToast(`It’s a match: ${name}<small>Sam loved it too</small>`);
+      }
+      i += 1;
+      const next = cards[i];
+      setTimeout(() => {
+        card.hidden = true;
+        if (next) next.hidden = false;
+        else {
+          doneList.textContent = matches.length
+            ? `You both love ${matches.join(', ')}.`
+            : 'No matches yet. Sam has different taste.';
+          done.hidden = false;
+        }
+      }, 300);
+    };
+
+    root.querySelectorAll<HTMLButtonElement>('[data-vote]').forEach((b) =>
+      b.addEventListener('click', () => vote(b.dataset.vote === 'yes')),
+    );
+    root.querySelector('[data-reset]')!.addEventListener('click', () => {
+      i = 0;
+      matches = [];
+      countEl.textContent = '0';
+      done.hidden = true;
+      cards.forEach((c, k) => {
+        c.classList.remove('out-yes', 'out-no');
+        c.hidden = k > 0;
+      });
+    });
+    // Arrow keys work while the demo is on screen
+    let visible = false;
+    new IntersectionObserver(([e]) => (visible = e.isIntersecting), { threshold: 0.5 }).observe(root);
+    document.addEventListener('keydown', (e) => {
+      if (!visible || e.target instanceof HTMLInputElement) return;
+      if (e.key === 'ArrowRight') vote(true);
+      if (e.key === 'ArrowLeft') vote(false);
+    });
+  });
+</script>

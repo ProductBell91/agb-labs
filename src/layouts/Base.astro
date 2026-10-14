@@ -1,4 +1,6 @@
 ---
+import '@fontsource-variable/bricolage-grotesque/opsz.css';
+import '@fontsource-variable/instrument-sans';
 import '../styles/global.css';
 
 interface Props {
@@ -28,12 +30,7 @@ const nav = [
     <meta property="og:url" content={canonical} />
     <meta property="og:type" content="website" />
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      rel="stylesheet"
-      href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400..800&family=Instrument+Sans:wght@400..700&display=swap"
-    />
+    <script is:inline src="/consent.js" defer></script>
     <script type="application/ld+json" set:html={JSON.stringify({
       '@context': 'https://schema.org',
       '@type': 'Person',
@@ -68,7 +65,12 @@ const nav = [
     </main>
     <footer class="site-foot wrap">
       <p>AGB Labs, Manchester. Built by Adam Guy Bell with AI coding agents.</p>
-      <p><a href="mailto:hello@agb-labs.com">hello@agb-labs.com</a></p>
+      <p class="foot-links">
+        <a href="mailto:hello@agb-labs.com">hello@agb-labs.com</a>
+        <a href="/privacy/">Privacy</a>
+        <a href="/cookies/">Cookies</a>
+        <a href="#" data-cookie-settings>Cookie settings</a>
+      </p>
     </footer>
   </body>
 </html>
@@ -103,4 +105,7 @@ const nav = [
     border-top: 1px solid var(--rule); color: var(--muted); font-size: 0.92rem;
   }
   .site-foot p { margin: 0; }
+  .foot-links { display: flex; flex-wrap: wrap; gap: 0.4rem 1.2rem; }
+  .foot-links a { color: var(--muted); }
+  .foot-links a:hover { color: var(--ink); }
 </style>

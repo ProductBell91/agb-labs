@@ -1,0 +1,52 @@
+---
+import Base from '../layouts/Base.astro';
+---
+<Base title="Cookies" description="The cookies agb-labs.com uses: none unless you accept analytics.">
+  <article class="wrap prose legal">
+    <h1>Cookies</h1>
+    <p class="muted">Last updated 14 October 2026</p>
+
+    <div class="short">
+      <h2>The short version</h2>
+      <ul>
+        <li>No cookies unless you tap Accept.</li>
+        <li>If you do, Google Analytics sets two, to count visits. Never for ads.</li>
+      </ul>
+      <p><a class="btn-ghost" href="#" data-cookie-settings>Change your cookie choice</a></p>
+    </div>
+
+    <h2>What cookies are</h2>
+    <p>Cookies are small files a website saves in your browser so it can remember something. Similar tools, such as your browser's local storage, work the same way, and this policy covers them too.</p>
+
+    <h2>Strictly necessary</h2>
+    <p>These don't need your consent, and none of them is a tracking cookie.</p>
+    <table>
+      <thead><tr><th>Name</th><th>What for</th><th>How long</th></tr></thead>
+      <tbody>
+        <tr><td><code>agb:cookie-consent</code> (local storage)</td><td>Remembers your cookie choice, so the site doesn't ask every visit</td><td>Until you clear it</td></tr>
+        <tr><td><code>__cf_bm</code> and similar</td><td>May be set by Cloudflare, which hosts the site, to tell people from bots</td><td>Up to 30 minutes</td></tr>
+      </tbody>
+    </table>
+
+    <h2>Analytics (only if you accept)</h2>
+    <p>If you tap Accept, the site loads Google Analytics to count visits, see which pages and demos people use and how they found the site. It isn't used for advertising. If you choose Necessary only, it never loads.</p>
+    <table>
+      <thead><tr><th>Name</th><th>What for</th><th>How long</th></tr></thead>
+      <tbody>
+        <tr><td><code>_ga</code></td><td>Tells one visitor from another</td><td>2 years</td></tr>
+        <tr><td><code>_ga_9VFMGRZ2NS</code></td><td>Keeps track of your visit</td><td>2 years</td></tr>
+      </tbody>
+    </table>
+    <p>Google's own explanation is at <a href="https://policies.google.com/technologies/cookies">policies.google.com</a>.</p>
+
+    <h2>Changing your mind</h2>
+    <p>Use <a href="#" data-cookie-settings>cookie settings</a> (also at the bottom of every page) to change your choice at any time. If you switch analytics off, the site removes its cookies. You can also clear or block cookies in your browser's settings.</p>
+
+    <h2>Questions</h2>
+    <p>Email <a href="mailto:hello@agb-labs.com">hello@agb-labs.com</a>. For everything else about your data, see the <a href="/privacy/">privacy policy</a>.</p>
+  </article>
+</Base>
+
+<style>
+  .btn-ghost { display: inline-flex; align-items: center; min-height: 44px; padding: 0 1.1rem; border-radius: 999px; box-shadow: inset 0 0 0 1px var(--rule); color: var(--ink); font-weight: 600; text-decoration: none; }
+</style>

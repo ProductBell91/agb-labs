@@ -6,12 +6,19 @@
     "dev": "astro dev --host 127.0.0.1 --port 4010",
     "build": "astro build",
     "preview": "astro preview --host 127.0.0.1 --port 4010",
-    "check": "astro check"
+    "check": "astro check",
+    "analytics:setup": "node scripts/analytics.mjs setup",
+    "analytics:pull": "node scripts/analytics.mjs pull",
+    "analytics:ga4": "node scripts/analytics.mjs ga4",
+    "analytics:gsc": "node scripts/analytics.mjs gsc"
   },
   "dependencies": {
     "@astrojs/mdx": "^8.0.3",
     "@astrojs/sitemap": "^3.7.4",
-    "astro": "^7.3.8"
+    "@fontsource-variable/bricolage-grotesque": "^5.3.0",
+    "@fontsource-variable/instrument-sans": "^5.3.0",
+    "astro": "^7.3.8",
+    "google-auth-library": "^11.3.0"
   },
   "devDependencies": {
     "@astrojs/check": "^0.9.10",

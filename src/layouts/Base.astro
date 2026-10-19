@@ -11,6 +11,12 @@ const { title, description } = Astro.props;
 const fullTitle = title === 'AGB Labs' ? 'AGB Labs | Products by Adam Bell' : `${title} | AGB Labs`;
 const canonical = new URL(Astro.url.pathname, Astro.site);
 const path = Astro.url.pathname;
+const products = [
+  { name: 'BumpSync', url: 'https://bumpsync.app' },
+  { name: 'HushSync', url: 'https://hushsync.app' },
+  { name: 'LittleSpots', url: 'https://littlespots.co.uk' },
+  { name: 'Mavropost', url: 'https://mavropost.com' },
+];
 const nav = [
   { href: '/#products', label: 'Products' },
   { href: '/how-i-build/', label: 'How I build' },
@@ -37,7 +43,13 @@ const nav = [
       name: 'Adam Guy Bell',
       jobTitle: 'Product Manager',
       url: 'https://agb-labs.com',
-      worksFor: { '@type': 'Organization', name: 'AGB Labs', url: 'https://agb-labs.com' },
+      worksFor: {
+        '@type': 'Organization',
+        name: 'AGB Labs',
+        url: 'https://agb-labs.com',
+        email: 'hello@agb-labs.com',
+        brand: products.map((p) => ({ '@type': 'Brand', name: p.name, url: p.url })),
+      },
     })} />
   </head>
   <body>
@@ -65,6 +77,9 @@ const nav = [
     </main>
     <footer class="site-foot wrap">
       <p>AGB Labs, Manchester. Built by Adam Guy Bell with AI coding agents.</p>
+      <p class="foot-links">
+        {products.map((p) => <a href={p.url}>{p.name}</a>)}
+      </p>
       <p class="foot-links">
         <a href="mailto:hello@agb-labs.com">hello@agb-labs.com</a>
         <a href="/privacy/">Privacy</a>

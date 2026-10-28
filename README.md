@@ -49,8 +49,8 @@ npm run check    # type-check .astro and .ts
 npm run build    # static site in dist/
 ```
 
-Every push and pull request runs `check` and `build` in [GitHub Actions](.github/workflows/check.yml).
-To deploy, build and upload `dist/` to Cloudflare Pages:
+Every push and pull request runs `check` and `build` in [GitHub Actions](.github/workflows/check.yml), and
+a push to `main` that passes deploys to Cloudflare Pages. To deploy by hand:
 
 ```bash
 npm run build && npx wrangler pages deploy dist --project-name agb-labs --branch main

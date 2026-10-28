@@ -3,7 +3,7 @@ import '@fontsource-variable/bricolage-grotesque/opsz.css';
 import '@fontsource-variable/instrument-sans';
 import '../styles/global.css';
 import { getCollection } from 'astro:content';
-import { person, profiles } from '../site';
+import { person, profiles, listedProfiles } from '../site';
 
 interface Props {
   title: string;
@@ -97,7 +97,7 @@ const nav = [
       </p>
       <p class="foot-links">
         <a href="mailto:hello@agb-labs.com">hello@agb-labs.com</a>
-        {profiles.map((p) => <a href={p.url} rel="me noopener">{p.label}</a>)}
+        {listedProfiles.map((p) => <a href={p.url} rel="me noopener">{p.label}</a>)}
         <a href="/privacy/">Privacy</a>
         <a href="/cookies/">Cookies</a>
         <a href="#" data-cookie-settings>Cookie settings</a>

@@ -1,6 +1,6 @@
 ---
 import Base from '../layouts/Base.astro';
-import { person, profiles } from '../site';
+import { person, profiles, listedProfiles } from '../site';
 
 const products = [
   { name: 'BumpSync', href: '/work/bumpsync/', line: 'a pregnancy app for both parents. Couples who connect are 9× more likely to still be using it a month later, so version 2 was rebuilt around getting the second parent in.' },
@@ -60,7 +60,7 @@ const products = [
 
     <p class="contact">
       <a class="btn" href="mailto:hello@agb-labs.com">Email me</a>
-      {profiles.map((p) => <a class="btn ghost" href={p.url} rel="me noopener">{p.label}</a>)}
+      {listedProfiles.map((p) => <a class="btn ghost" href={p.url} rel="me noopener">{p.label}</a>)}
       <span class="muted">CV on request.</span>
     </p>
   </article>

@@ -2,13 +2,20 @@
 import '@fontsource-variable/bricolage-grotesque/opsz.css';
 import '@fontsource-variable/instrument-sans';
 import '../styles/global.css';
+import { getCollection } from 'astro:content';
+import { person, profiles } from '../site';
 
 interface Props {
   title: string;
   description: string;
+  // Replaces the "<title> | AGB Labs" pattern, for pages that should lead with something else (the person's name).
+  fullTitle?: string;
+  // Extra JSON-LD for this page (e.g. ProfilePage, BlogPosting), alongside the site-wide Person.
+  schema?: Record<string, unknown>;
+  ogType?: 'website' | 'article' | 'profile';
 }
-const { title, description } = Astro.props;
-const fullTitle = title === 'AGB Labs' ? 'AGB Labs | Products by Adam Bell' : `${title} | AGB Labs`;
+const { title, description, schema, ogType = 'website' } = Astro.props;
+const fullTitle = Astro.props.fullTitle ?? (title === 'AGB Labs' ? 'Adam Bell, Product Manager | AGB Labs' : `${title} | AGB Labs`);
 const canonical = new URL(Astro.url.pathname, Astro.site);
 const path = Astro.url.pathname;
 const products = [
@@ -17,9 +24,11 @@ const products = [
   { name: 'LittleSpots', url: 'https://littlespots.co.uk' },
   { name: 'Mavropost', url: 'https://mavropost.com' },
 ];
+const hasWriting = (await getCollection('writing', (e) => e.data.published)).length > 0;
 const nav = [
   { href: '/#products', label: 'Products' },
   { href: '/how-i-build/', label: 'How I build' },
+  ...(hasWriting ? [{ href: '/writing/', label: 'Writing' }] : []),
   { href: '/about/', label: 'About' },
 ];
 ---
@@ -34,15 +43,20 @@ const nav = [
     <meta property="og:title" content={fullTitle} />
     <meta property="og:description" content={description} />
     <meta property="og:url" content={canonical} />
-    <meta property="og:type" content="website" />
+    <meta property="og:type" content={ogType} />
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
     <script is:inline src="/consent.js" defer></script>
     <script type="application/ld+json" set:html={JSON.stringify({
       '@context': 'https://schema.org',
       '@type': 'Person',
-      name: 'Adam Guy Bell',
-      jobTitle: 'Product Manager',
-      url: 'https://agb-labs.com',
+      '@id': person.id,
+      name: person.name,
+      alternateName: person.legalName,
+      jobTitle: person.jobTitle,
+      url: 'https://agb-labs.com/about/',
+      address: { '@type': 'PostalAddress', addressLocality: person.city, addressCountry: 'GB' },
+      knowsAbout: ['Product management', 'Product ownership', 'Fintech', 'Car finance', 'Marketplaces', 'Building products with AI coding agents'],
+      ...(profiles.length ? { sameAs: profiles.map((p) => p.url) } : {}),
       worksFor: {
         '@type': 'Organization',
         name: 'AGB Labs',
@@ -51,6 +65,7 @@ const nav = [
         brand: products.map((p) => ({ '@type': 'Brand', name: p.name, url: p.url })),
       },
     })} />
+    {schema && <script type="application/ld+json" set:html={JSON.stringify({ '@context': 'https://schema.org', ...schema })} />}
   </head>
   <body>
     <a class="sr-only skip" href="#main">Skip to content</a>
@@ -76,12 +91,13 @@ const nav = [
       <slot />
     </main>
     <footer class="site-foot wrap">
-      <p>AGB Labs, Manchester. Built by Adam Guy Bell with AI coding agents.</p>
+      <p>AGB Labs, Manchester. Built by Adam Bell with AI coding agents.</p>
       <p class="foot-links">
         {products.map((p) => <a href={p.url}>{p.name}</a>)}
       </p>
       <p class="foot-links">
         <a href="mailto:hello@agb-labs.com">hello@agb-labs.com</a>
+        {profiles.map((p) => <a href={p.url} rel="me noopener">{p.label}</a>)}
         <a href="/privacy/">Privacy</a>
         <a href="/cookies/">Cookies</a>
         <a href="#" data-cookie-settings>Cookie settings</a>

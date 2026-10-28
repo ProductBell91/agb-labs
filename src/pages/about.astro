@@ -1,7 +1,25 @@
 ---
 import Base from '../layouts/Base.astro';
+import { person, profiles } from '../site';
+
+const products = [
+  { name: 'BumpSync', href: '/work/bumpsync/', line: 'a pregnancy app for both parents. Couples who connect are 9× more likely to still be using it a month later, so version 2 was rebuilt around getting the second parent in.' },
+  { name: 'HushSync', href: '/#hushsync', line: 'hum a lullaby and get back a finished song, with each AI model doing the job it’s best at.' },
+  { name: 'LittleSpots', href: '/#littlespots', line: 'where to eat out with a baby. 6,725 venues across Greater Manchester, with AI guesses labelled as guesses until an owner confirms them.' },
+  { name: 'Mavropost', href: '/#mavropost', line: 'an AI marketing team that can’t post without a person approving it. It runs BumpSync’s Instagram.' },
+];
 ---
-<Base title="About" description="Adam Bell: product manager in Manchester who builds his own products with AI.">
+<Base
+  title="About"
+  fullTitle="Adam Bell, Product Manager in Manchester | AGB Labs"
+  description="Adam Bell is a product manager in Manchester: Product Owner for car finance at cinch, formerly Head of Product at Housemates, and builder of four products with AI."
+  ogType="profile"
+  schema={{
+    '@type': 'ProfilePage',
+    mainEntity: { '@id': person.id },
+    url: 'https://agb-labs.com/about/',
+  }}
+>
   <article class="wrap about">
     <h1>Adam Bell</h1>
     <p class="lede">Product manager in Manchester. Regulated fintech by day, my own products the rest of the time.</p>
@@ -10,7 +28,41 @@ import Base from '../layouts/Base.astro';
       <li><b>Before</b><span>Head of Product at Housemates, a student housing marketplace</span></li>
       <li><b>Side</b><span>AGB Labs: four products, built solo with AI</span></li>
     </ul>
-    <p class="contact"><a class="btn" href="mailto:hello@agb-labs.com">Email me</a> <span class="muted">CV on request.</span></p>
+
+    <div class="prose story">
+      <h2>Product manager, day job and side projects</h2>
+      <p>
+        I’m Product Owner for car finance at cinch, which means working on a regulated fintech product.
+        Before that I was Head of Product at Housemates, a marketplace for student housing.
+      </p>
+      <p>
+        Outside work I run AGB Labs, where I decide what to build and then build it. AI coding agents do
+        most of the typing; I make the product calls, read the numbers and decide what ships. It’s the
+        same job as my day job, with a much shorter loop between a decision and seeing whether it was right.
+      </p>
+
+      <h2>What I’ve built</h2>
+      <ul>
+        {products.map((p) => <li><a href={p.href}>{p.name}</a>: <span set:html={p.line} /></li>)}
+      </ul>
+      <p>
+        Every one can be tried on the <a href="/#products">home page</a>. <a href="/how-i-build/">How I build</a> covers
+        the platform behind them: coding agents on a server that I direct from my phone.
+      </p>
+
+      <h2>How I work</h2>
+      <ul>
+        <li><strong>Start with the bet.</strong> Each product begins with one decision about what will make people come back, and the build follows from it.</li>
+        <li><strong>Let the numbers change the plan.</strong> BumpSync’s retention data is why its second version looks the way it does.</li>
+        <li><strong>Keep AI honest.</strong> If AI guessed something, the product says so, and a person approves anything that goes out in public.</li>
+      </ul>
+    </div>
+
+    <p class="contact">
+      <a class="btn" href="mailto:hello@agb-labs.com">Email me</a>
+      {profiles.map((p) => <a class="btn ghost" href={p.url} rel="me noopener">{p.label}</a>)}
+      <span class="muted">CV on request.</span>
+    </p>
   </article>
 </Base>
 
@@ -20,6 +72,9 @@ import Base from '../layouts/Base.astro';
   .facts { list-style: none; padding: 0; margin: 2.5rem 0 0; display: grid; gap: 0.75rem; max-width: 40rem; }
   .facts li { display: grid; grid-template-columns: 5rem 1fr; gap: 1rem; background: var(--surface); border-radius: 16px; padding: 1rem 1.2rem; }
   .facts b { font-family: var(--display); }
-  .contact { display: flex; align-items: center; gap: 1rem; margin-top: 2.5rem; }
+  .story { margin-top: 1rem; }
+  .story h2 { font-size: 1.5rem; }
+  .contact { display: flex; flex-wrap: wrap; align-items: center; gap: 1rem; margin-top: 2.5rem; }
   .btn { display: inline-flex; align-items: center; min-height: 48px; padding: 0 1.4rem; border-radius: 999px; background: var(--ink); color: var(--bg); font-weight: 600; text-decoration: none; }
+  .btn.ghost { background: var(--surface); color: var(--ink); }
 </style>

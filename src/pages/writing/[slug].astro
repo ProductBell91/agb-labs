@@ -1,0 +1,50 @@
+---
+import { getCollection, render } from 'astro:content';
+import Base from '../../layouts/Base.astro';
+import { person } from '../../site';
+
+export async function getStaticPaths() {
+  const posts = await getCollection('writing', (e) => e.data.published);
+  return posts.map((post) => ({ params: { slug: post.id }, props: { post } }));
+}
+
+const { post } = Astro.props;
+const { Content } = await render(post);
+const d = post.data;
+const fmt = (date: Date) => date.toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' });
+const url = new URL(Astro.url.pathname, Astro.site).href;
+---
+<Base
+  title={d.title}
+  description={d.description}
+  ogType="article"
+  schema={{
+    '@type': 'BlogPosting',
+    headline: d.title,
+    description: d.description,
+    datePublished: d.date.toISOString(),
+    ...(d.updated ? { dateModified: d.updated.toISOString() } : {}),
+    author: { '@id': person.id, '@type': 'Person', name: person.name, url: 'https://agb-labs.com/about/' },
+    mainEntityOfPage: url,
+  }}
+>
+  <article class="wrap post">
+    <p class="back"><a href="/writing/">All writing</a></p>
+    <h1>{d.title}</h1>
+    <p class="meta">
+      <a href="/about/">{person.name}</a> · <time datetime={d.date.toISOString()}>{fmt(d.date)}</time>
+      {d.updated && <> · updated <time datetime={d.updated.toISOString()}>{fmt(d.updated)}</time></>}
+    </p>
+    <div class="prose body"><Content /></div>
+  </article>
+</Base>
+
+<style>
+  .post { padding-top: 2.5rem; }
+  .back { font-size: 0.95rem; font-weight: 600; margin-bottom: 1.2rem; }
+  .back a { color: var(--muted); text-decoration: none; }
+  h1 { max-width: 24ch; }
+  .meta { color: var(--muted); font-size: 0.92rem; margin-top: 1rem; }
+  .meta a { color: inherit; }
+  .body { margin-top: 2rem; }
+</style>

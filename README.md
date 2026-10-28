@@ -12,6 +12,13 @@ npm run build    # outputs dist/
 - Case studies: `src/content/work/*.mdx` (only `published: true` get a page)
 - Tailnet preview: PM2 `agb-labs-preview` serves `dist/`
 
+## Search: name and writing
+
+- **Name**: titles and the Person schema lead with "Adam Bell" (legal name `Adam Guy Bell` as `alternateName`).
+  Profile links live in `src/site.ts`; each one goes into `sameAs`, the footer and `/about/`. Fill in LinkedIn there.
+- **Writing**: Markdown/MDX in `src/content/writing/`, served at `/writing/<slug>/` with BlogPosting schema. Set
+  `published: true` to ship one; the nav link and `/writing/` index only exist once at least one is published.
+
 ## Analytics, Search Console, privacy
 
 - **GA4**: property `559028350`, stream `G-9VFMGRZ2NS`. `public/consent.js` loads it only after the visitor

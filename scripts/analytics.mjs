@@ -9,9 +9,8 @@
  *   node scripts/analytics.mjs gsc [--days=N]
  *   node scripts/analytics.mjs pull [--days=N]   both
  *
- * Identity: the BumpSync analytics service account (bumpsync-analytics@bumpsync-486821.iam.gserviceaccount.com),
- * key at /var/lib/agb-labs/analytics-sa.json. It needs Editor on the GA4 property (Viewer is enough once
- * setup has run) and Full user on the Search Console property sc-domain:agb-labs.com.
+ * Identity: a Google service account whose key file is AGB_GOOGLE_CREDENTIALS (default below). It needs Editor
+ * on the GA4 property (Viewer is enough once setup has run) and Full user on Search Console sc-domain:agb-labs.com.
  *
  * Env (optional): AGB_GOOGLE_CREDENTIALS, AGB_GA4_PROPERTY_ID (numeric, found by setup if unset),
  * AGB_SEARCH_CONSOLE_SITE (default sc-domain:agb-labs.com).

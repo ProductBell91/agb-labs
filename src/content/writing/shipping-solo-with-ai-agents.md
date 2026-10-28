@@ -1,11 +1,11 @@
 ---
 title: What a product manager learns shipping four products solo with AI coding agents
-description: Draft. Adam Bell on making the product calls while AI agents write the code, and what BumpSync, HushSync, LittleSpots and Mavropost taught him.
+description: Adam Bell on making the product calls while AI agents write the code, and what BumpSync, HushSync, LittleSpots and Mavropost taught him.
 date: 2026-10-28
 published: false
 ---
 
-Outline (Adam to write; keep it in his own words, with real numbers):
+Draft outline.
 
 ## The loop got shorter
 - Decision to live product: what used to take a sprint now takes an evening. What that changes about deciding.

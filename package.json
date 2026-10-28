@@ -1,7 +1,17 @@
 {
   "name": "agb-labs",
+  "description": "Source for agb-labs.com: Adam Bell's product portfolio, with a playable demo of every product.",
+  "homepage": "https://agb-labs.com",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ProductBell91/agb-labs.git"
+  },
+  "author": "Adam Bell (https://agb-labs.com)",
   "type": "module",
   "private": true,
+  "engines": {
+    "node": ">=22"
+  },
   "scripts": {
     "dev": "astro dev --host 127.0.0.1 --port 4010",
     "build": "astro build",

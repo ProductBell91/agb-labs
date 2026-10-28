@@ -13,7 +13,7 @@ const work = defineCollection({
     role: z.string(),
     timeframe: z.string(),
     stack: z.array(z.string()),
-    links: z.array(z.object({ label: z.string(), href: z.string().url() })).default([]),
+    links: z.array(z.object({ label: z.string(), href: z.url() })).default([]),
     shots: z.array(z.object({ src: z.string(), alt: z.string() })).default([]),
     metrics: z.array(z.object({ value: z.string(), label: z.string() })).default([]),
     // Only flagships with a finished write-up get a page; the rest show as cards.

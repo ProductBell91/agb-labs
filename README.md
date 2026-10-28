@@ -50,7 +50,11 @@ npm run build    # static site in dist/
 ```
 
 Every push and pull request runs `check` and `build` in [GitHub Actions](.github/workflows/check.yml).
-Cloudflare Pages deploys `main`.
+To deploy, build and upload `dist/` to Cloudflare Pages:
+
+```bash
+npm run build && npx wrangler pages deploy dist --project-name agb-labs --branch main
+```
 
 ## What's where
 
